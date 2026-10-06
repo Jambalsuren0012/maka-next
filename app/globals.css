@@ -1,9 +1,16 @@
 @import "tailwindcss";
 
-:root { color-scheme: dark; }
+@theme inline {
+  --font-sans: var(--font-oswald), sans-serif;
+  --font-handwriting: var(--font-caveat), cursive;
+}
+
+:root { color-scheme: dark; --font-oswald: "Oswald"; --font-caveat: "Caveat"; }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; min-height: 100vh; background: #0b0813; color: #f3f4f6; font-family: Arial, Helvetica, sans-serif; }
+body { margin: 0; min-height: 100vh; background: #0b0813; color: #f3f4f6; font-family: var(--font-oswald), sans-serif; }
+button, input, select, textarea { font-family: inherit; }
+h1, h2 { font-family: var(--font-caveat), cursive; }
 a { text-decoration: none; }
 .storefront { isolation: isolate; background: #0b0813; }
 .glass-panel { background: rgba(22, 16, 40, .78); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }

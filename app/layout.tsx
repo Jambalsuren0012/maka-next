@@ -13,6 +13,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="mn" className="h-full antialiased">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Oswald:wght@200..700&display=swap" rel="stylesheet" />
+      </head>
       <body className="flex min-h-full flex-col"><CartProvider><div className="storefront relative min-h-screen overflow-hidden"><div className="ambient ambient-one"/><div className="ambient ambient-two"/><div className="ambient ambient-three"/><AnnouncementBar/><SiteHeader/>{children}<SiteFooter/></div></CartProvider></body>
     </html>
   );
