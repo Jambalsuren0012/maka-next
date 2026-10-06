@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { products, money } from "../lib/products";
+import { useCart } from "./cart-provider";
 
 const categories = [
   "Бүх ангилал",
@@ -21,20 +24,12 @@ const categories = [
   "Шинэ жил",
 ];
 
-const products = [
-  { name: "Тригонометр утгын хүснэгт", category: "Тоо тооцоолол", price: 18000, oldPrice: 22000, rating: "4.9", reviews: 28, image: "photo-1635070041078-e363dbe005cb", emoji: "∑" },
-  { name: "Паскалийн гурвалжин", category: "Магадлал статистик", price: 18000, oldPrice: 22000, rating: "4.8", reviews: 16, image: "photo-1509228468518-180dd4864904", emoji: "△" },
-  { name: "Пифагорын теорем", category: "Геометр", price: 13000, oldPrice: 18000, rating: "5.0", reviews: 32, image: "photo-1635372722656-389f87a941b7", emoji: "π" },
-  { name: "Тригонометр харьцаа", category: "Геометр", price: 13000, oldPrice: 18000, rating: "4.9", reviews: 21, image: "photo-1635070041078-e363dbe005cb", emoji: "△" },
-  { name: "Тооны орны хүснэгт — соронзон", category: "Уян соронзон самбарууд", price: 25000, oldPrice: 30000, rating: "4.8", reviews: 19, image: "photo-1509228468518-180dd4864904", emoji: "123" },
-  { name: "Математикийн багц үзүүлэн", category: "МАТЕМАТИКИЙН БАГЦ ҮЗҮҮЛЭН", price: 96000, oldPrice: 120000, rating: "5.0", reviews: 12, image: "photo-1635372722656-389f87a941b7", emoji: "＋" },
-  { name: "Дэлхийн газрын зураг", category: "Газар зүй", price: 32000, oldPrice: 38000, rating: "4.7", reviews: 9, image: "photo-1524661135-423995f22d0b", emoji: "🌍" },
-  { name: "HAGOROMO цагаан самбарын шохой", category: "HAGOROMO шохой", price: 48000, oldPrice: 55000, rating: "4.9", reviews: 44, image: "photo-1513475382585-d06e58bcb0e0", emoji: "✎" },
-];
 
-const money = (amount: number) => `${amount.toLocaleString("mn-MN")}₮`;
+
+
 
 export function Catalog() {
+  const { addItem } = useCart();
   const [category, setCategory] = useState("Бүх ангилал");
   const [query, setQuery] = useState("");
 
@@ -83,14 +78,15 @@ export function Catalog() {
           {visibleProducts.map((product, index) => (
             <article key={product.name} className={`modern-product group overflow-hidden rounded-2xl ${index === 0 && category === "Бүх ангилал" ? "modern-product-featured lg:col-span-2 lg:row-span-2" : ""}`}>
               <div className="product-media relative overflow-hidden">
-                <img src={`https://images.unsplash.com/${product.image}?auto=format&fit=crop&w=900&q=85`} alt={product.name} className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]" />
+                <Link href={`/products/${product.slug}`} className="block h-full w-full"><img src={`https://images.unsplash.com/${product.image}?auto=format&fit=crop&w=900&q=85`} alt={product.name} className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]" /></Link>
                 <span className="product-discount absolute left-3 top-3 rounded-full px-3 py-1.5 text-[11px] font-semibold">−{money(product.oldPrice - product.price)}</span>
                 <button aria-label={`${product.name} хадгалах`} className="product-save absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full text-lg backdrop-blur">♡</button>
                 {index === 0 && category === "Бүх ангилал" && <span className="product-feature-label absolute bottom-3 left-3 rounded-full px-3 py-1.5 text-xs">Эрэлттэй · Багш нарын сонголт</span>}
               </div>
               <div className="product-copy p-4 sm:p-5">
-                <p className="product-category">{product.category}</p><h3 className="product-name mt-2 text-sm font-medium leading-5">{product.name}</h3>
+                <p className="product-category">{product.category}</p><h3 className="product-name mt-2 text-sm font-medium leading-5"><Link href={`/products/${product.slug}`}>{product.name}</Link></h3>
                 <div className="mt-4 flex items-center justify-between gap-2"><div className="flex items-center gap-2"><strong className="product-price text-sm">{money(product.price)}</strong><del className="product-old-price text-xs">{money(product.oldPrice)}</del></div><span className="product-rating text-xs">★ {product.rating} <span>({product.reviews})</span></span></div>
+                <button type="button" className="product-add" onClick={() => addItem(product)}>+ Сагсанд нэмэх</button>
               </div>
             </article>
           ))}
